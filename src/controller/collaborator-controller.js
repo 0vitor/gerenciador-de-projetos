@@ -5,4 +5,11 @@ const getAll = async (req, res) => {
   res.send(response)
 }
 
-export default { getAll }
+const save = async (req, res) => {
+  await Collaborator.create(req.body, (err, data) => {
+    err ? res.send(err) : res.send(data)
+  }
+  )
+}
+
+export default { getAll, save }
