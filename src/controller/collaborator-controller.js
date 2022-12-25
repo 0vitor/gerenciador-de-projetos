@@ -12,4 +12,16 @@ const save = async (req, res) => {
   )
 }
 
-export default { getAll, save }
+const update = async (req, res) => {
+  const { currentEmail, newEmail, name, passowrd, funcao } = req.body
+  const query = { email: currentEmail }
+  const collaboratorData = { name, email: newEmail, passowrd, funcao }
+
+  Collaborator.updateOne(
+    query,
+    collaboratorData,
+    (err, data) => err ? res.send(err) : res.send(data)
+  )
+}
+
+export default { getAll, save, update }

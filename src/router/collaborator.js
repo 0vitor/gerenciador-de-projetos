@@ -5,6 +5,8 @@ const router = express.Router()
 
 router.get('/', (req, res) => collaboratorController.getAll(req, res))
 router.post('/', (req, res) => collaboratorController.save(req, res))
+router.put('/', (req, res) => collaboratorController.update(req, res))
+
 
 
 export default router
