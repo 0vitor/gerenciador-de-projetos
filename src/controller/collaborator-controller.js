@@ -24,4 +24,15 @@ const update = async (req, res) => {
   )
 }
 
-export default { getAll, save, update }
+const deleteAll = async (req, res) => {
+  const response = await Collaborator.deleteMany({})
+  res.send(response)
+}
+
+const deleteOne = async (req, res) => {
+  const { email, passowrd } = req.body
+  const response = await Collaborator.deleteOne({ email, passowrd })
+  res.send(response)
+}
+
+export default { getAll, save, update, deleteAll, deleteOne }
