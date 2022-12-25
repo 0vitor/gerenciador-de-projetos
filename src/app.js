@@ -1,5 +1,5 @@
 import express from 'express'
-import colaboratorRouter from "./Router/collaborator.js"
+import colaboratorRouter from "./router/collaborator.js"
 import mongoose from 'mongoose'
 
 const url = "mongodb+srv://bancoTDD:n303qDfGy6VWnrjd@demo.qiebebi.mongodb.net/?retryWrites=true&w=majority"
