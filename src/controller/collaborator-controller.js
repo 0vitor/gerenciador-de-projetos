@@ -5,6 +5,12 @@ const getAll = async (req, res) => {
   res.send(response)
 }
 
+const getOne = async (req, res) => {
+  const { email, passowrd } = req.body
+  const response = await Collaborator.findOne({ email, passowrd })
+  res.send(response)
+}
+
 const save = async (req, res) => {
   await Collaborator.create(req.body, (err, data) => {
     err ? res.send(err) : res.send(data)
@@ -35,4 +41,4 @@ const deleteOne = async (req, res) => {
   res.send(response)
 }
 
-export default { getAll, save, update, deleteAll, deleteOne }
+export default { getAll, save, update, deleteAll, deleteOne, getOne }
