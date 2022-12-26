@@ -5,7 +5,6 @@ import Collaborator from '../model/collaborator.js'
 const router = express.Router()
 
 const verifyToken = (req, res, next) => {
-  
   const token = req.headers['x-access-token']
   jwt.verify(token, process.env.PRIVATE_KEY, (err, decoded) => {
     if (err) {
@@ -29,6 +28,7 @@ const makeAuth = async (req, res) => {
   const token = jwt.sign({ userId }, process.env.PRIVATE_KEY, { expiresIn: 200 })
   res.send({ auth: true, token: token })
 }
+
 router.get('/', verifyToken, (req, res) => res.send('deu certo'))
 router.post('/', (req, res) => makeAuth(req, res))
 
