@@ -16,17 +16,14 @@ const verifyToken = (req, res, next) => {
 
 const makeAuth = async (req, res) => {
   const { email, passowrd } = req.body
-  let userId;
   try {
-  const { _id } = await Collaborator.findOne({ email, passowrd })
-  userId = _id
-  } catch(error) {
-    res.status(400).end()
-    console.log(error)
+    const collaborator = await Collaborator.findOne({ email, passowrd }).select('+passowrd')
+    bcrypt.compare(passowrd, collaborator.passowrd)
+    const token = jwt.sign(collaborator._id, process.env.PRIVATE_KEY, { expiresIn: 200 })
+    res.send({ auth: true, token: token })
+  } catch (error) {
+    return res.status(400).send('user not exist').end()
   }
-
-  const token = jwt.sign({ userId }, process.env.PRIVATE_KEY, { expiresIn: 200 })
-  res.send({ auth: true, token: token })
 }
 
 router.get('/', verifyToken, (req, res) => res.send('deu certo'))
