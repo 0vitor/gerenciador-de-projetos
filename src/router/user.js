@@ -1,6 +1,6 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
-import Collaborator from '../model/collaborator.js'
+import { makeAuth } from '../infra/auth/user-authentication.js'
 
 const router = express.Router()
 
@@ -12,18 +12,6 @@ const verifyToken = (req, res, next) => {
     }
     next()
   })
-}
-
-const makeAuth = async (req, res) => {
-  const { email, passowrd } = req.body
-  try {
-    const collaborator = await Collaborator.findOne({ email, passowrd }).select('+passowrd')
-    bcrypt.compare(passowrd, collaborator.passowrd)
-    const token = jwt.sign(collaborator._id, process.env.PRIVATE_KEY, { expiresIn: 200 })
-    res.send({ auth: true, token: token })
-  } catch (error) {
-    return res.status(400).send('user not exist').end()
-  }
 }
 
 router.get('/', verifyToken, (req, res) => res.send('deu certo'))
