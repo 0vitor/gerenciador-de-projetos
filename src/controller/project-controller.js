@@ -39,7 +39,12 @@ const save = async (req, res) => {
     return res.status(400).send('status input invalido')
   }
 }
-//
+
+const deleteAll = async (req, res) => {
+  const response = await Project.deleteMany({})
+  res.send(response)
+}
+
 //const update = async (req, res) => {
 //  try {
 //
@@ -66,11 +71,6 @@ const save = async (req, res) => {
 //
 //}
 //
-//const deleteAll = async (req, res) => {
-//  console.log('asdsa')
-//  const response = await Project.deleteMany({})
-//  res.send(response)
-//}
 //
 //const deleteOne = async (req, res) => {
 //  const { email, passowrd } = req.body
@@ -83,4 +83,4 @@ const save = async (req, res) => {
 //  }
 //}
 //
-export default { getAll, getOne, save }
+export default { getAll, getOne, save, deleteAll }
