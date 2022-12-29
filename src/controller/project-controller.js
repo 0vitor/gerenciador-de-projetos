@@ -1,10 +1,8 @@
 import Project from "../model/project.js"
-//import verifyPassowrd from "../infra/cryptography/verify-passowrd.js"
-//import encrypt from "../infra/cryptography/encrypt.js"
 import projectQuery from "../infra/mongodb/project-query.js"
 
 const getAll = async (req, res) => {
-  const response = await Project.find({})
+  const response = await Project.find({}).populate({path: 'collaborators'}).exec()
   res.send(response)
 }
 
