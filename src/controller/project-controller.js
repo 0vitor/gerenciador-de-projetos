@@ -13,14 +13,30 @@ const getOne = async (req, res) => {
 }
 
 const save = async (req, res) => {
-  const result = await projectQuery.create(req.body)
-  const nameAlreadyExist = 11000
-  if (result == nameAlreadyExist) {
-    res.status(400).send('name ja existe')
-  } else if (!result) {
-    res.status(400).send('ocorreu um erro')
-  } else {
-    res.send('projeto criado com sucesso')
+  
+  function validateStatusInput(status) {
+    const options = ["prospectado", "producao", "finalizado"]
+    return options.includes(status)
+  } 
+
+  function varifyDuplicateName() {
+    const nameAlreadyExist = 11000
+    return result == nameAlreadyExist 
+  }
+  
+  if(validateStatusInput(req.body.status)) {
+    const result = await projectQuery.create(req.body)
+    
+    if (varifyDuplicateName(result)) {
+      res.status(400).send('name ja existe')
+    } else if (!result) {
+      res.status(400).send('ocorreu um erro')
+    } else {
+      res.send('projeto criado com sucesso')
+    }
+  }
+  else {
+    return res.status(400).send('status input invalido')
   }
 }
 //
