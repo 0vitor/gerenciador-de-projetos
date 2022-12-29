@@ -7,7 +7,7 @@ function connectDataBase(url) {
   mongoose.set('strictQuery', true)
   mongoose.connect(url)
   mongoose.connection.on('connected', () => {
-    console.log('conectado')
+    console.log('mongodb conected')
   })
 }
 

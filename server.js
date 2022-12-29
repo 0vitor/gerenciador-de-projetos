@@ -1,3 +1,3 @@
 import app from './src/app.js'
 
-app.listen(3001, () => { console.log('running...') })
+app.listen(3001, () => { console.log('server runing...') })
