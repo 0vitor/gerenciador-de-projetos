@@ -8,7 +8,7 @@ const makeAuth = async (req, res) => {
     const collaborator = await Collaborator.findOne({ email }).select('+passowrd')
     if (await verifyPassowrd(passowrd, collaborator.passowrd)) {
       const { _id } = collaborator
-      const token = jwt.sign({ _id }, process.env.PRIVATE_KEY, { expiresIn: 200 })
+      const token = jwt.sign({ _id }, process.env.PRIVATE_KEY, { expiresIn: 20000 })
       res.send({ auth: true, token: token })
     }
 
