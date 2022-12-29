@@ -1,6 +1,7 @@
 import Collaborator from "../model/collaborator.js"
 import verifyPassowrd from "../infra/cryptography/verify-passowrd.js"
 import encrypt from "../infra/cryptography/encrypt.js"
+import collaboratorQuery from "../infra/mongodb/collaborator-query.js"
 
 const getAll = async (req, res) => {
   const response = await Collaborator.find({})
@@ -14,37 +15,43 @@ const getOne = async (req, res) => {
 }
 
 const save = async (req, res) => {
-  const hash = encrypt(req.body.passowrd, 10);
-  req.body.passowrd = hash
-  await Collaborator.create(req.body, (err, data) => {
-    err ? res.send(err) : res.send('salvo com sucesso')
+  req.body.passowrd = encrypt(req.body.passowrd, 10);
+  console.log(req.body.passowrd)
+  const result = await collaboratorQuery.create(req.body)
+  const emailAlreadyExist = 11000
+  if (result == emailAlreadyExist) {
+    res.status(400).send('email ja existe')
+  } else if (!result) {
+    res.status(400).send('ocorreu um erro')
+  } else {
+    res.send('registrado com sucesso')
   }
-  )
 }
 
 const update = async (req, res) => {
-  const { currentEmail, newEmail, name, passowrd, funcao } = req.body
-  const query = { email: currentEmail }
-  const collaboratorData = { name, email: newEmail, passowrd, funcao }
-  const collaborator = await Collaborator.findOne({ currentEmail }).select('+passowrd')
-  
-  if (await verifyPassowrd(passowrd, collaborator.passowrd)) {
-    Collaborator.updateOne(query, collaboratorData,
-      (err, data) => {
-        if (err) {
-          res.send('server error')
-        }
-        if (data.matchedCount == 0) {
-          res.send('usuario ou senha incorreto')
-        }
-        if (data.modifiedCount != 0) {
-          res.send('atualizado com sucesso')
-        }
-      }
-    )
-  } else {
-    res.send('usuario ou senha incorreto')
-  } 
+  try {
+
+    const { currentEmail, newEmail, name, passowrd, funcao } = req.body
+    const collaborator = await collaboratorQuery.findOne(currentEmail)
+    if (!collaborator) {
+      return res.send('usuario nao encontrado')
+    }
+    const collaboratorData = { email: newEmail, name, passowrd: encrypt(passowrd, 10), funcao }
+    const isValid = await verifyPassowrd(passowrd, collaborator.passowrd)
+    if (isValid) {
+      const response = await collaboratorQuery.updateOne(currentEmail, collaboratorData)
+      const emailAlreadyExist = 11000
+      if (response == emailAlreadyExist)
+        res.status(400).send('email ja existe')
+      else
+        res.send(response)
+    } else {
+      res.status(400).send('senha incorreta')
+    }
+  }catch (err) {
+    res.status(400).send('ocorreu um erro, verifique se os parametros estão corretos')
+  }
+
 }
 
 const deleteAll = async (req, res) => {
