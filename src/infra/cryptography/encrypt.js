@@ -1,9 +1,10 @@
 import bcrypt from "bcrypt"
 
-export default function encrypt(passowrd, saltRound) {
+export default function encrypt(passowrd) {
   try {
+    const saltRound = 10
     return bcrypt.hashSync(passowrd, saltRound)
-  } catch {
-    return
+  } catch (err) {
+    console.log(err)
   }
 }
