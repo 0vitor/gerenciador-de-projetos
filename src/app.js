@@ -1,6 +1,7 @@
 import express from 'express'
 import colaboratorRouter from "./router/collaborator.js"
 import projectRouter from "./router/project.js"
+import companyRouter from "./router/company.js"
 import userRouter from "./router/user.js"
 import connectDataBase from './infra/mongodb/mongo-login.js'
 
@@ -13,5 +14,5 @@ app.use(express.json())
 app.use("/auth", userRouter)
 app.use("/project", projectRouter)
 app.use("/colaboradores", colaboratorRouter)
-
+app.use("/company", companyRouter)
 export default app
