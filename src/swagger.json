@@ -1,0 +1,558 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API para gerenciamento de projetos",
+    "description": "Essa API tem como propósito catalogar e gerenciar projetos",
+    "termsOfService": "aa",
+    "contact": {
+      "email": "w.wutaes@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/",
+      "description": "API de test"
+    },
+    {
+      "url": "http://apideproducao.com",
+      "description": "API de produção"
+    }
+  ],
+  "paths": {
+    "/colaboradores": {
+      "get": {
+        "sumary": "Pegar todos os colaboradores",
+        "description": "Essa rota será responsável por pegar todos os colaboradores",
+        "tags": [
+          "Collaborator"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Collaborator"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "sumary": "Cadastro de colaborador",
+        "description": "Essa rota será responsável por cadastrar novos colaborador",
+        "tags": [
+          "Collaborator"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Collaborator"
+              },
+              "examples": {
+                "colaborator": {
+                  "value": {
+                    "name": "joao paulo",
+                    "email": "joaopaulo@gmail.com",
+                    "role": "gerente",
+                    "passowrd": "sf34%6SF"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "unauthorizad"
+          },
+          "400": {
+            "description": "ocorreu um erro"
+          },
+          "200": {
+            "description": "ok"
+          }
+        }
+      },
+      "put": {
+        "sumary": "Modificar colaboradores",
+        "description": "Essa rota tem como objetivo modificar as informações dos colaboradores",
+        "tags": [
+          "Collaborator"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Email do colaborador que vai modificar",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "newEmail": "string",
+                "$ref": "#/components/schemas/Collaborator"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/colaboradores/deleteByEmail": {
+      "delete": {
+        "sumary": "Remover colaborador",
+        "description": "Essa rota tem como objetivo remover um colaborador",
+        "tags": [
+          "Collaborator"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Email do colaborador que vai ser removido",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Removido com sucesso"
+          },
+          "400": {
+            "description": "Error"
+          },
+          "404": {
+            "description": "Colaborador não encontrado"
+          }
+        }
+      }
+    },
+    "/colaboradores/findByEmail": {
+      "get": {
+        "sumary": "Encontrar um colaborador",
+        "description": "Essa rota será responsável por encontrar um colaborador pelo email",
+        "tags": [
+          "Collaborator"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "email do colaborador para busca",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Collaborator"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found"
+          },
+          "400": {
+            "description": "error"
+          }
+        }
+      }
+    },
+    "/project/findByName": {
+      "get": {
+        "sumary": "Encontrar um projeto",
+        "description": "Essa rota será responsável por encontrar um projeto pelo nome",
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "nome",
+            "in": "query",
+            "description": "nome do projeto para busca",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found"
+          },
+          "400": {
+            "description": "error"
+          }
+        }
+      }
+    },
+    "/project/deleteByName": {
+      "delete": {
+        "sumary": "Remover um projeto",
+        "description": "Essa rota tem como objetivo remover um projeto",
+        "tags": [
+          "Project"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "nome",
+            "in": "query",
+            "description": "Nome do projeto que vai ser removido",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Removido com sucesso"
+          },
+          "400": {
+            "description": "Error"
+          },
+          "404": {
+            "description": "Projeto não encontrado"
+          }
+        }
+      }
+    },
+    "/project": {
+      "delete": {
+        "sumary": "Remover Todos os projeto",
+        "description": "Essa rota tem como objetivo remover todos projeto",
+        "tags": [
+          "Project"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Removido com sucesso"
+          },
+          "400": {
+            "description": "Error"
+          },
+          "404": {
+            "description": "Projeto não encontrado"
+          }
+        }
+      },
+      "get": {
+        "sumary": "Pegar todos os projetos",
+        "description": "Essa rota será responsável por pegar todos os projetos",
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Project"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "sumary": "Cadastro de projeto",
+        "description": "Essa rota será responsável por cadastrar novos projetos",
+        "tags": [
+          "Project"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project"
+              },
+              "examples": {
+                "project": {
+                  "value": {
+                    "name": "API",
+                    "description": "essa api tem como proposito...",
+                    "status": "prospectado",
+                    "value": 2000,
+                    "colaboratoes": [
+                      "id-do-colaborador1",
+                      "id-do-colaborador2"
+                    ],
+                    "companies": [
+                      "id-da-empresa1",
+                      "id-da-empresa2"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "sumary": "Modificação de projeto",
+        "description": "Essa rota será responsável por modificar os dados de projetos",
+        "tags": [
+          "Project"
+        ],
+        "secutiry": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Email para atualizar o projeto",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project"
+              },
+              "examples": {
+                "project": {
+                  "value": {
+                    "name": "xilften",
+                    "description": "App de filme",
+                    "status": "finalizado",
+                    "value": 2444,
+                    "colaboratoes": [
+                      "id-do-colaborador5",
+                      "id-do-colaborador3"
+                    ],
+                    "companies": [
+                      "id-da-empresa3",
+                      "id-da-empresa2"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/company": {
+      "get": {
+        "sumary": "Pegar todos as empresas",
+        "description": "Essa rota será responsável por pegar todos os empresas",
+        "tags": [
+          "Comany"
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Company"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "sumary": "Cadastro de empresa",
+        "description": "Essa rota será responsável por cadastrar novos empresas",
+        "tags": [
+          "Comany"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Company"
+              },
+              "examples": {
+                "comapny": {
+                  "value": {
+                    "name": "contrução",
+                    "address": "rua grujim",
+                    "cnpj": "98.938.923/3948-38",
+                    "phoneNumber": "99 39485-2948"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "sumary": "Modificação de empresa",
+        "description": "Essa rota será responsável por modificar os dados de empresas",
+        "tags": [
+          "Comany"
+        ],
+        "secutiry": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Email para atualizar o empresa",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Company"
+              },
+              "examples": {
+                "comapny": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Collaborator": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "passowrd": {
+            "type": "string"
+          }
+        }
+      },
+      "Company": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "cnpj": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          }
+        }
+      },
+      "Project": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "descritption": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "description": "define o status do projeto que pode ser 'finalizado', 'prospectado' ou 'producao'"
+          },
+          "value": {
+            "type": "string"
+          },
+          "collborators": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "companies": {
+            "type": "array"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
