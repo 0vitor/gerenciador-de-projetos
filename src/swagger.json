@@ -400,7 +400,7 @@
         "sumary": "Pegar todos as empresas",
         "description": "Essa rota será responsável por pegar todos os empresas",
         "tags": [
-          "Comany"
+          "Company"
         ],
         "responses": {
           "200": {
@@ -422,7 +422,7 @@
         "sumary": "Cadastro de empresa",
         "description": "Essa rota será responsável por cadastrar novos empresas",
         "tags": [
-          "Comany"
+          "Company"
         ],
         "security": [
           {
@@ -453,7 +453,7 @@
         "sumary": "Modificação de empresa",
         "description": "Essa rota será responsável por modificar os dados de empresas",
         "tags": [
-          "Comany"
+          "Company"
         ],
         "secutiry": [
           {
