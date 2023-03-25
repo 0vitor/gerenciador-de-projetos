@@ -4,11 +4,11 @@ import { verifyToken } from '../infra/auth/user-authentication.js'
 
 const router = express.Router()
 
-router.get('/', verifyToken, (req, res) => collaboratorController.getAll(req, res))
-router.get('/one', verifyToken, (req, res) => collaboratorController.getOne(req, res))
+router.get('/', (req, res) => collaboratorController.getAll(req, res))
+router.get('/findByEmail', (req, res) => collaboratorController.getEmail(req, res))
 router.post('/', verifyToken, (req, res) => collaboratorController.save(req, res))
 router.put('/', verifyToken, (req, res) => collaboratorController.update(req, res))
 router.delete('/', verifyToken, (req, res) => collaboratorController.deleteAll(req, res))
-router.delete('/one', verifyToken, (req, res) => collaboratorController.deleteOne(req, res))
+router.delete('/deleteByEmail', verifyToken, (req, res) => collaboratorController.deleteByEmail(req, res))
 
 export default router
