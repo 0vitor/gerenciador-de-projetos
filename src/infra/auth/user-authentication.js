@@ -8,12 +8,11 @@ const makeAuth = async (req, res) => {
     const collaborator = await Collaborator.findOne({ email }).select('+passowrd')
     if (await verifyPassowrd(passowrd, collaborator.passowrd)) {
       const { _id } = collaborator
-      const token = jwt.sign({ _id }, process.env.PRIVATE_KEY, { expiresIn: 20000 })
+      const token = jwt.sign({ _id }, process.env.PRIVATE_KEY, { expiresIn: "3 days" })
       res.send({ auth: true, token: token })
-    }
-
-  } catch (error) {
-    return res.status(400).send('usuario inexistente').end()
+    } 
+  } catch (err) {
+    return res.status(401).send(err.message)
   }
 }
 
@@ -21,7 +20,7 @@ const verifyToken = (req, res, next) => {
   const token = req.headers['x-access-token']
   jwt.verify(token, process.env.PRIVATE_KEY, (err, decoded) => {
     if (err) {
-      return res.status(400).send('token invalido').end()
+      return res.status(401).send(err.message)
     }
     next()
   })
