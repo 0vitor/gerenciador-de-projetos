@@ -9,6 +9,6 @@ router.get('/findByName', (req, res) => projectController.getOne(req, res))
 router.post('/', verifyToken, (req, res) => projectController.save(req, res))
 router.put('/', verifyToken, (req, res) => projectController.update(req, res))
 router.delete('/', verifyToken, (req, res) => projectController.deleteAll(req, res))
-router.delete('/findByName', verifyToken, (req, res) => projectController.deleteOne(req, res))
+router.delete('/deleteByName', verifyToken, (req, res) => projectController.deleteOne(req, res))
 
 export default router
