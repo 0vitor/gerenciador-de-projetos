@@ -1,21 +1,20 @@
 import Project from "../model/project.js"
 import yup from "yup"
-import errorHandler from "../error/error-handle.js"
 
 const schemaProject = yup.object().shape({
   newName: yup.string(),
   name: yup.string().required(),
-  description: yup.string().required('Erro: Necessário preencher o campo nome!'),
+  description: yup.string().required(),
   status: yup.string().oneOf(
     ["prospectado", "producao", "finalizado"]
   )
-    .required('Erro: Necessário preencher o campo status!'),
-  value: yup.number('Erro: Este campo deve possuir apenas números')
-    .positive('Erro: Este campo só aceita números positivos!')
-    .required('Erro: Necessário preencher o campo valor!'),
-  collaborators: yup.array()
-    .required('Erro: Necessário preencher o campo calaboradores!'),
-  companies: yup.array().required('Erro: Necessário preencher o campo empresas!')
+    .required(),
+  value: yup.number()
+    .positive()
+    .required(),
+  collaborators: yup.array().of(yup.string().length(24).required())
+    .required(),
+  companies: yup.array().required()
 })
 
 const getAll = async (req, res) => {
@@ -27,13 +26,15 @@ const getAll = async (req, res) => {
 }
 
 const getOne = async (req, res) => {
-  const { name } = req.body
+  const { name } = req.query
   const response = await Project.findOne({ name })
     .populate({ path: 'collaborators' })
     .populate({ path: 'companies' })
     .exec()
-
-  res.send(response)
+  if(response)
+    res.send(response)
+  else
+    res.status(404).send("Not found")
 }
 
 const save = async (req, res) => {
@@ -43,7 +44,7 @@ const save = async (req, res) => {
     await Project.create(project)
     return res.status(201).send('projeto criado com sucesso')
   } catch (err) {
-    errorHandler(err, 'project')
+    return res.status(400).send(err.message)
   }
 }
 
@@ -62,10 +63,9 @@ const update = async (req, res) => {
     await Project.updateOne({ name }, project)
     return res.send('modificado com sucesso!')
   } catch (err) {
-    errorHandler(err, 'projeto')
+    res.status(400).send(err.message)
   }
 }
-
 
 const deleteOne = async (req, res) => {
   try {
@@ -73,8 +73,7 @@ const deleteOne = async (req, res) => {
     await Collaborator.deleteOne({ name })
     res.send('deletado com sucesso')
   } catch (err) {
-    //console.log(err)
-    return res.status(400).send('ocorreu um erro')
+    return res.status(400).send(err.message)
   }
 }
 
