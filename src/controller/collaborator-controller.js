@@ -21,7 +21,6 @@ const getAll = async (req, res) => {
 
 const getEmail = async (req, res) => {
   try {
-    console.log(req)
     const { email } = req.query
     const response = await Collaborator.findOne({ email })
     if (response)
@@ -29,6 +28,7 @@ const getEmail = async (req, res) => {
     else
       res.status(404).send('not found')
   } catch (err) {
+    console.log(err)
     res.status(400).send('error')
   }
 }
